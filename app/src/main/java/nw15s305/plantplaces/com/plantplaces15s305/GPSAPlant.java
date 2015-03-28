@@ -4,14 +4,21 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class GPSAPlant extends ActionBarActivity {
+
+    private Button btnPause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpsaplant);
+
+        btnPause = (Button) findViewById(R.id.btnPause);
     }
 
 
@@ -35,5 +42,9 @@ public class GPSAPlant extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void btnPauseClicked (View v) {
+        Toast.makeText(this, "CLicked", Toast.LENGTH_LONG).show();
     }
 }
