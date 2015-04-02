@@ -5,5 +5,14 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="lblPause">Pause GPS</string>
+    <string name="lblLatitude">Latitude</string>
+    <string name="lblLongitude">Longitude</string>
+    <string name="lblZero">0.0</string>
+    <string name="lblGPSAge">GPS Age</string>
+    <string name="lblPlantName">Plant Name</string>
+    <string name="lblBlank" />
+    <string name="lblShowSaved">Show Saved</string>
+    <string name="lblTakePhoto">Take Photo</string>
+    <string name="lblSave">Save</string>
 
 </resources>
