@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ColorCaptureActivity"
+            android:label="@string/title_activity_color_capture" >
+        </activity>
     </application>
 
 </manifest>
