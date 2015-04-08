@@ -22,6 +22,10 @@ import java.util.Date;
 
 public class GPSAPlant extends PlantPlacesActivity {
 
+    @Override
+    public int getCurrentMenuId() {
+        return R.id.gpsaplant;
+    }
 
     public static final int CAMERA_REQUEST = 10;
     private AutoCompleteTextView actPlantName;

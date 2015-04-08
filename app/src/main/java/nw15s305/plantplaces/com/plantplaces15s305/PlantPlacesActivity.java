@@ -8,11 +8,18 @@ import android.view.MenuItem;
 /**
  * Created by jonesb on 4/7/2015.
  */
-public class PlantPlacesActivity extends ActionBarActivity {
+public abstract class PlantPlacesActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_gpsaplant, menu);
+
+        int currentMenuId = getCurrentMenuId();
+        // if we have a menu ID, remove that from our menu.
+        if (currentMenuId != 0) {
+            menu.removeItem(currentMenuId);
+        }
+
         return true;
     }
 
@@ -48,4 +55,6 @@ public class PlantPlacesActivity extends ActionBarActivity {
         Intent searchByColorIntent = new Intent(this, ColorCaptureActivity.class);
         startActivity(searchByColorIntent);
     }
+
+    public abstract int getCurrentMenuId();
 }

@@ -9,6 +9,11 @@ import android.view.MenuItem;
 public class ColorCaptureActivity extends PlantPlacesActivity {
 
     @Override
+    public int getCurrentMenuId() {
+        return R.id.capturecolor;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_capture);
