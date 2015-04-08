@@ -3,4 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".GPSAPlant">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/gpsaplant" android:title="GPS a Plant" app:showAsAction="ifRoom" android:onClick="gpsAPlantClicked"/>
+    <item android:id="@+id/capturecolor" android:title="Search by Color" app:showAsAction="ifRoom" android:onClick="searchByColorClicked"/>
 </menu>
