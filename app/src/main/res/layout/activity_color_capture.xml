@@ -36,7 +36,9 @@
             android:layout_height="wrap_content"
             android:text="@string/lblOpenExistingImage"
             android:id="@+id/btnImageGallery"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:onClick="onImageGalleryClicked"
+            android:nestedScrollingEnabled="true" />
     </LinearLayout>
 
     <GridView
