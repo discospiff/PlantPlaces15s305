@@ -47,7 +47,8 @@
         android:layout_alignBottom="@+id/lblLongitude"
         android:layout_toRightOf="@+id/lblLongitude"
         android:layout_toEndOf="@+id/lblLongitude"
-        android:paddingLeft="2dp" />
+        android:paddingLeft="2dp"
+        android:layout_alignParentEnd="false" />
 
     <TextView
         android:layout_width="wrap_content"
