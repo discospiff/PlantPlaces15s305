@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,7 @@ import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,8 +31,16 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import nw15s305.plantplaces.com.dao.IPlantDAO;
+import nw15s305.plantplaces.com.dao.PlantDAO;
+import nw15s305.plantplaces.com.dao.PlantDAOStub;
+import nw15s305.plantplaces.com.dto.PlantDTO;
 
 
 public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -64,6 +74,10 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         setContentView(R.layout.activity_gpsaplant);
 
         actPlantName = (AutoCompleteTextView) findViewById(R.id.actPlantName);
+
+        // get plant names for our AutoCompleteTextView
+        PlantSearchTask pst = new PlantSearchTask();
+        pst.execute("Redbud");
 
         // get access to the image view.
         imgSpecimenPhoto = (ImageView) findViewById(R.id.imgSpecimenPhoto);
@@ -226,4 +240,32 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
 
     }
+
+    class PlantSearchTask extends AsyncTask<String, Integer, List<PlantDTO>> {
+
+        @Override
+        protected void onPostExecute(List<PlantDTO> plantDTOs) {
+            super.onPostExecute(plantDTOs);
+            ArrayAdapter<PlantDTO> plantAdapter = new ArrayAdapter<PlantDTO>(GPSAPlant.this.getApplicationContext(), android.R.layout.simple_list_item_1, plantDTOs);
+            actPlantName.setAdapter(plantAdapter);
+
+        }
+
+        @Override
+        protected List<PlantDTO> doInBackground(String... params) {
+            IPlantDAO plantDAO = new PlantDAO();
+            try {
+                return plantDAO.fetchPlants(params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ArrayList<PlantDTO>();
+            }
+        }
+    }
+
 }
+
+
+
+
+
