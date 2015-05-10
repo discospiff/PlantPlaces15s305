@@ -5,6 +5,8 @@ package nw15s305.plantplaces.com.dto;
  * Created by jonesb on 4/23/2015.
  */
 public class PlantDTO {
+
+    private long cacheID;
     int guid;
     String genus;
     String species;
@@ -55,4 +57,11 @@ public class PlantDTO {
         return genus + " " + species + " " + cultivar + " " + common;
     }
 
+    public long getCacheID() {
+        return cacheID;
+    }
+
+    public void setCacheID(long cacheID) {
+        this.cacheID = cacheID;
+    }
 }

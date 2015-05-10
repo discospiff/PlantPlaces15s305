@@ -36,8 +36,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import nw15s305.plantplaces.com.dao.IOfflinePlantDAO;
 import nw15s305.plantplaces.com.dao.IPlantDAO;
+import nw15s305.plantplaces.com.dao.OfflinePlantDAO;
 import nw15s305.plantplaces.com.dao.PlantDAO;
 import nw15s305.plantplaces.com.dao.PlantDAOStub;
 import nw15s305.plantplaces.com.dto.PlantDTO;
@@ -254,12 +257,34 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         @Override
         protected List<PlantDTO> doInBackground(String... params) {
             IPlantDAO plantDAO = new PlantDAO();
-            try {
-                return plantDAO.fetchPlants(params[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new ArrayList<PlantDTO>();
+            IOfflinePlantDAO offlinePlantDAO = new OfflinePlantDAO(GPSAPlant.this);
+            List<PlantDTO> allPlants = new ArrayList<PlantDTO>();
+
+            int countPlants = offlinePlantDAO.countPlants();
+
+            // if we have less than 1000 plants, we don't have them all; let's get them.
+            if (countPlants < 1000) {
+                try {
+                    allPlants= plantDAO.fetchPlants(params[0]);
+
+                    Set<Integer> localGUIDs = offlinePlantDAO.fetchAllGuids();
+
+                    // iterate over all of the plants we fetched, and place them into the local database.
+                    for (PlantDTO plant : allPlants) {
+
+                        // do we have a valid GUID, and is it NOT in our local database?  If so, then insert.
+                        if (plant.getGuid() > 0 && !localGUIDs.contains(Integer.valueOf(plant.getGuid())) ) {
+                            // insert into database.
+                            offlinePlantDAO.insert(plant);
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
             }
+            return allPlants;
         }
     }
 
