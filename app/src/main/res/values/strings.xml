@@ -20,5 +20,7 @@
     <string name="title_activity_color_capture">ColorCaptureActivity</string>
     <string name="lblTakeNewPhoto">Take New Photo</string>
     <string name="lblOpenExistingImage">Open Existing Image</string>
+    <string name="downladingPlantNames">Downloading Plant Names</string>
+    <string name="lblCancel">Cancel</string>
 
 </resources>

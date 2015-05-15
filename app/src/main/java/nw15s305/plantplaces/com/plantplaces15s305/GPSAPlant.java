@@ -1,5 +1,7 @@
 package nw15s305.plantplaces.com.plantplaces15s305;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +57,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     private TextView lblLatitudeValue;
     private boolean paused = false;
     private Button btnPause;
+    private ProgressDialog plantProgressDialog;
 
     @Override
     public int getCurrentMenuId() {
@@ -80,7 +84,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
         // get plant names for our AutoCompleteTextView
         PlantSearchTask pst = new PlantSearchTask();
-        pst.execute("Redbud");
+        pst.execute("e");
 
         // get access to the image view.
         imgSpecimenPhoto = (ImageView) findViewById(R.id.imgSpecimenPhoto);
@@ -249,6 +253,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         @Override
         protected void onPostExecute(List<PlantDTO> plantDTOs) {
             super.onPostExecute(plantDTOs);
+            plantProgressDialog.dismiss();
             ArrayAdapter<PlantDTO> plantAdapter = new ArrayAdapter<PlantDTO>(GPSAPlant.this.getApplicationContext(), android.R.layout.simple_list_item_1, plantDTOs);
             actPlantName.setAdapter(plantAdapter);
 
@@ -256,16 +261,21 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
         @Override
         protected List<PlantDTO> doInBackground(String... params) {
+            publishProgress(1);
             IPlantDAO plantDAO = new PlantDAO();
             IOfflinePlantDAO offlinePlantDAO = new OfflinePlantDAO(GPSAPlant.this);
             List<PlantDTO> allPlants = new ArrayList<PlantDTO>();
 
             int countPlants = offlinePlantDAO.countPlants();
 
+            int plantCounter = 0;
+
             // if we have less than 1000 plants, we don't have them all; let's get them.
             if (countPlants < 1000) {
                 try {
+                    publishProgress(2);
                     allPlants= plantDAO.fetchPlants(params[0]);
+                    publishProgress(3);
 
                     Set<Integer> localGUIDs = offlinePlantDAO.fetchAllGuids();
 
@@ -277,7 +287,12 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
                             // insert into database.
                             offlinePlantDAO.insert(plant);
                         }
-
+                        // update the progress indicator to show how much we have saved into the database
+                        plantCounter++;
+                        if (plantCounter % (allPlants.size()/25) == 0) {
+                            // update progress
+                            publishProgress(plantCounter * 100/allPlants.size());
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -285,6 +300,35 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
                 }
             }
             return allPlants;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            // Setup our plant progress dialog
+            plantProgressDialog = new ProgressDialog(GPSAPlant.this);
+            plantProgressDialog.setCancelable(true);
+            plantProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            plantProgressDialog.setProgressStyle(0);
+            plantProgressDialog.setMax(100);
+            plantProgressDialog.setMessage(getString(R.string.downladingPlantNames));
+
+            // make a button.
+            plantProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.lblCancel), new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+
+            plantProgressDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            plantProgressDialog.setProgress(values[0]);
         }
     }
 
