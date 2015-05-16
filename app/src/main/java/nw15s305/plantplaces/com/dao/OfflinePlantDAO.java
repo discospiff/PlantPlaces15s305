@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +35,37 @@ public class OfflinePlantDAO extends SQLiteOpenHelper implements IOfflinePlantDA
 
     @Override
     public List<PlantDTO> fetchPlants(String searchTerm) throws IOException, JSONException {
-        return null;
+        String sql = "SELECT * FROM " + PLANTS + " ";
+        String where = " WHERE " + GENUS + " LIKE '%" + searchTerm + "%' OR " + SPECIES + " LIKE '%" + searchTerm + "%' OR " + CULTIVAR + " LIKE '%" + searchTerm + "%' OR " + COMMON + " LIKE '%" + searchTerm + "%'";
+        return innerSelect(sql + where);
+
+    }
+
+    private List<PlantDTO> innerSelect(String sql) {
+        // declare my return variable.
+        List<PlantDTO> allPlants = new ArrayList<PlantDTO>();
+
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) {
+                PlantDTO plant = new PlantDTO();
+                plant.setCacheID(cursor.getInt(cursor.getColumnIndex(CACHE_ID)));
+                plant.setGuid(cursor.getInt(cursor.getColumnIndex(GUID)));
+                plant.setGenus(cursor.getString(cursor.getColumnIndex(GENUS)));
+                plant.setSpecies(cursor.getString(cursor.getColumnIndex(SPECIES)));
+                plant.setCultivar(cursor.getString(cursor.getColumnIndex(CULTIVAR)));
+                plant.setCommon(cursor.getString(cursor.getColumnIndex(COMMON)));
+                allPlants.add(plant);
+                // move to the next row.
+                cursor.moveToNext();
+            }
+        }
+
+        cursor.close();
+        return allPlants;
     }
 
 

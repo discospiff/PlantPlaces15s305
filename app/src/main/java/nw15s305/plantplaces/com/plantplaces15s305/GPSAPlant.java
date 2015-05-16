@@ -33,6 +33,8 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -297,6 +299,12 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
                 } catch (Exception e) {
                     e.printStackTrace();
 
+                }
+            } else {
+                try {
+                    allPlants = offlinePlantDAO.fetchPlants(params[0]);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             return allPlants;
