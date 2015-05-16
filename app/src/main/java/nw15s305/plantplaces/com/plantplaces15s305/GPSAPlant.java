@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -60,6 +61,8 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     private boolean paused = false;
     private Button btnPause;
     private ProgressDialog plantProgressDialog;
+    private long cacheID;
+    private int guid;
 
     @Override
     public int getCurrentMenuId() {
@@ -83,6 +86,13 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         setContentView(R.layout.activity_gpsaplant);
 
         actPlantName = (AutoCompleteTextView) findViewById(R.id.actPlantName);
+
+        // Create an instance of the PlantSelected Listener.
+        PlantSelected ps = new PlantSelected();
+
+        // subscribe actPlantName to this PlantSelected Listener.
+        actPlantName.setOnItemClickListener(ps);
+        actPlantName.setOnItemSelectedListener(ps);
 
         // get plant names for our AutoCompleteTextView
         PlantSearchTask pst = new PlantSearchTask();
@@ -344,6 +354,32 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
             plantProgressDialog.setProgress(values[0]);
         }
     }
+
+    class PlantSelected implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // get the selected item.
+            PlantDTO plant = (PlantDTO) actPlantName.getAdapter().getItem(position);
+            cacheID = plant.getCacheID();
+            guid = plant.getGuid();
+
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            // get the selected item.
+            PlantDTO plant = (PlantDTO) actPlantName.getAdapter().getItem(position);
+            cacheID = plant.getCacheID();
+            guid = plant.getGuid();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
 
 }
 
