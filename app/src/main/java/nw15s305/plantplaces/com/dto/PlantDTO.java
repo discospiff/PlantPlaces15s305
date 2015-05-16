@@ -1,5 +1,7 @@
 package nw15s305.plantplaces.com.dto;
 
+import java.util.List;
+
 /**
  * This class represents the attributes that describe a plant.
  * Created by jonesb on 4/23/2015.
@@ -12,6 +14,16 @@ public class PlantDTO {
     String species;
     String cultivar;
     String common;
+
+    public List<SpecimenDTO> getSpecimens() {
+        return specimens;
+    }
+
+    public void setSpecimens(List<SpecimenDTO> specimens) {
+        this.specimens = specimens;
+    }
+
+    List<SpecimenDTO> specimens;
 
     public int getGuid() {
         return guid;
