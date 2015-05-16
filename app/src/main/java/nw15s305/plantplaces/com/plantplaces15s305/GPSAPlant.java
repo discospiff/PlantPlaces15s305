@@ -276,29 +276,34 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
             if (countPlants < 1000) {
                 try {
                     publishProgress(2);
-                    allPlants= plantDAO.fetchPlants(params[0]);
+                    allPlants = plantDAO.fetchPlants(params[0]);
                     publishProgress(3);
 
                     Set<Integer> localGUIDs = offlinePlantDAO.fetchAllGuids();
+
 
                     // iterate over all of the plants we fetched, and place them into the local database.
                     for (PlantDTO plant : allPlants) {
 
                         // do we have a valid GUID, and is it NOT in our local database?  If so, then insert.
-                        if (plant.getGuid() > 0 && !localGUIDs.contains(Integer.valueOf(plant.getGuid())) ) {
+                        if (plant.getGuid() > 0 && !localGUIDs.contains(Integer.valueOf(plant.getGuid()))) {
                             // insert into database.
                             offlinePlantDAO.insert(plant);
                         }
                         // update the progress indicator to show how much we have saved into the database
                         plantCounter++;
-                        if (plantCounter % (allPlants.size()/25) == 0) {
+                        if (plantCounter % (allPlants.size() / 25) == 0) {
                             // update progress
-                            publishProgress(plantCounter * 100/allPlants.size());
+                            publishProgress(plantCounter * 100 / allPlants.size());
                         }
                     }
-                } catch (Exception e) {
+                } catch(Exception e) {
                     e.printStackTrace();
-
+                    try {
+                        allPlants = offlinePlantDAO.fetchPlants(params[0]);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             } else {
                 try {
