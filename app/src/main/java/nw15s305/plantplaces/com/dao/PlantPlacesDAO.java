@@ -41,7 +41,7 @@ public class PlantPlacesDAO extends SQLiteOpenHelper {
 
         String createSpecimens = "CREATE TABLE " + SPECIMENS + " ( " + CACHE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 GUID + " INTEGER, " + PLANT_GUID + " INTEGER, " + PLANT_CACHE_ID + " INTEGER, " + LATITUDE + " TEXT, " +
-                LONGITUDE + " TEXT, " + DESCRIPTION + " TEXT, " + PICTURE_URI + " TEXT " + " ); ";
+                LONGITUDE + " TEXT, " + LOCATION + " TEXT, " + DESCRIPTION + " TEXT, " + PICTURE_URI + " TEXT " + " ); ";
 
         db.execSQL(createSpecimens);
     }
@@ -50,4 +50,6 @@ public class PlantPlacesDAO extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+
 }
