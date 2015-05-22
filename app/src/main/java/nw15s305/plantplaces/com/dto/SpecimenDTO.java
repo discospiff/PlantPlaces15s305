@@ -13,6 +13,16 @@ public class SpecimenDTO {
     private String location;
     private String description;
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    private String photo;
+
 
     public int getPlantGuid() {
         return plantGuid;
