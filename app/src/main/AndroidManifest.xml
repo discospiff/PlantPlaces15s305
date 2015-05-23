@@ -27,6 +27,7 @@
             android:name=".ColorCaptureActivity"
             android:label="@string/title_activity_color_capture" >
         </activity>
+        <activity android:name=".SpecimenShowActivity"></activity>
 
         <receiver
             android:name=".SynchronizeBroadcastReceiver"

@@ -133,7 +133,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="onSaveClicked"/>
 
     <TextView
         android:layout_width="wrap_content"

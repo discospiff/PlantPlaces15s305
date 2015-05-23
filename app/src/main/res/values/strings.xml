@@ -22,5 +22,8 @@
     <string name="lblOpenExistingImage">Open Existing Image</string>
     <string name="downladingPlantNames">Downloading Plant Names</string>
     <string name="lblCancel">Cancel</string>
+    <string name="unableToSaveSpecimen">Unable to save specimen</string>
+    <string name="lblSearchTerm">Enter Search Term</string>
+    <string name="lblSearch">Search</string>
 
 </resources>

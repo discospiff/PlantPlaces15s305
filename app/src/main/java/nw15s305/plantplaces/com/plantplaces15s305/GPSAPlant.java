@@ -46,10 +46,13 @@ import java.util.Set;
 
 import nw15s305.plantplaces.com.dao.IOfflinePlantDAO;
 import nw15s305.plantplaces.com.dao.IPlantDAO;
+import nw15s305.plantplaces.com.dao.ISpecimenDAO;
 import nw15s305.plantplaces.com.dao.OfflinePlantDAO;
+import nw15s305.plantplaces.com.dao.OfflineSpecimenDAO;
 import nw15s305.plantplaces.com.dao.PlantDAO;
 import nw15s305.plantplaces.com.dao.PlantDAOStub;
 import nw15s305.plantplaces.com.dto.PlantDTO;
+import nw15s305.plantplaces.com.dto.SpecimenDTO;
 
 
 public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -63,6 +66,9 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     private ProgressDialog plantProgressDialog;
     private long cacheID;
     private int guid;
+    private AutoCompleteTextView location;
+    private AutoCompleteTextView description;
+    private Uri pictureUri;
 
     @Override
     public int getCurrentMenuId() {
@@ -77,6 +83,8 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     private LocationRequest locationRequest;
     public final static int MILLISECONDS_PER_SECOND = 1000;
     public final static int MINUTE = 60 * MILLISECONDS_PER_SECOND;
+
+    ISpecimenDAO specimenDAO;
 
 
     @Override
@@ -119,6 +127,10 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
         btnPause = (Button) findViewById(R.id.btnPause);
 
+        specimenDAO = new OfflineSpecimenDAO(this);
+
+        description = (AutoCompleteTextView) findViewById(R.id.actDescription);
+        location = (AutoCompleteTextView) findViewById(R.id.actLocation);
     }
 
     /**
@@ -126,13 +138,10 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
      * @param v
      */
     public void btnShowSavedClicked(View v) {
-        // get the name the user entered.
-        String plantName = actPlantName.getText().toString();
+        // add an explicit intent to invoke our Specimen Show Fragment
+        Intent specimenShowIntent = new Intent(this, SpecimenShowActivity.class);
+        startActivity(specimenShowIntent);
 
-        String foo = plantName;
-
-        // show the user the name entered.
-        Toast.makeText(this, plantName, Toast.LENGTH_LONG).show();
     }
 
     public void btnPauseClicked (View v) {
@@ -164,9 +173,34 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         String pictureName = getPictureName();
         File imageFile = new File(pictureDirectory, pictureName);
-        Uri pictureUri = Uri.fromFile(imageFile);
+        pictureUri = Uri.fromFile(imageFile);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    public void onSaveClicked(View v) {
+        // create a DTO to hold our specimen information.
+        SpecimenDTO specimen = new SpecimenDTO();
+
+        // populate the specimen with values from the screen.
+        specimen.setPlantCacheId(cacheID);
+        specimen.setPlantGuid(guid);
+        specimen.setLocation(location.getText().toString());
+        specimen.setDescription(description.getText().toString());
+        specimen.setLatitude(Double.toString(latitude));
+        specimen.setLongitude(Double.toString(longitude));
+        if (pictureUri != null) {
+            specimen.setPhoto(pictureUri.toString());
+        }
+
+        // save the specimen.
+        try {
+            specimenDAO.save(specimen);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, R.string.unableToSaveSpecimen, Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private String getPictureName() {
