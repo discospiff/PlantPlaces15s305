@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "763536257652",
+    "firebase_url": "https://plantplacesnw2015.firebaseio.com",
+    "project_id": "plantplacesnw2015",
+    "storage_bucket": "plantplacesnw2015.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763536257652:android:b09b15bb3d29e2a6",
+        "android_client_info": {
+          "package_name": "nw15s305.plantplaces.com.plantplaces15s305"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763536257652-e53pfralfjs7lgnso0b1isdnk8ofcugi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGOzGEwqKZq6spoOTPXcHhcJ89dFihcmM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -33,6 +33,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 
@@ -87,6 +89,9 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     ISpecimenDAO specimenDAO;
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +136,8 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
         description = (AutoCompleteTextView) findViewById(R.id.actDescription);
         location = (AutoCompleteTextView) findViewById(R.id.actLocation);
+
+
     }
 
     /**
@@ -195,7 +202,12 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
         // save the specimen.
         try {
-            specimenDAO.save(specimen);
+            // specimenDAO.save(specimen);
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference databaseReference = database.getReference();
+            databaseReference.child("foo").push().setValue(specimen);
+
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, R.string.unableToSaveSpecimen, Toast.LENGTH_LONG).show();
