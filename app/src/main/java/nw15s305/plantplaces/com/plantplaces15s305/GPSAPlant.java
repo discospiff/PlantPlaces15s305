@@ -329,7 +329,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
             int plantCounter = 0;
 
             // if we have less than 1000 plants, we don't have them all; let's get them.
-            if (countPlants < 1000) {
+            if (countPlants < 10000) {
                 try {
                     publishProgress(2);
                     allPlants = plantDAO.fetchPlants(params[0]);

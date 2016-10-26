@@ -6,7 +6,14 @@ package nw15s305.plantplaces.com.dao;
 //import org.apache.http.impl.client.BasicResponseHandler;
 //import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by jonesb on 4/24/2015.
@@ -19,15 +26,23 @@ public class NetworkDAO {
      * @return the set of data provided by the uri
      */
     public String request(String uri) throws IOException {
-        // Use the GET method, which submits the search terms in the URL.
-//        HttpGet httpGet = new HttpGet(uri);
-//        // how to handle response data.
-//        ResponseHandler<String> responseHander = new BasicResponseHandler();
-//
-//        // marry the request and the response.
-//        HttpClient httpClient = new DefaultHttpClient();
-        String returnString = null;
-//            returnString = httpClient.execute(httpGet, responseHander);
-        return returnString;
+        StringBuilder sb = new StringBuilder();
+
+        URL url = new URL(uri);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+            // temporary string to hold each line read from the reader.
+            String inputLine;
+            while ((inputLine = bin.readLine()) != null) {
+                sb.append(inputLine);
+            }
+        } finally {
+            // regardless of success or failure, we will disconnect from the URLConnection.
+            urlConnection.disconnect();
+        }
+        return sb.toString();
     }
+
 }
