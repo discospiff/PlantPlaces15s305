@@ -13,11 +13,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -57,7 +60,7 @@ import nw15s305.plantplaces.com.dto.PlantDTO;
 import nw15s305.plantplaces.com.dto.SpecimenDTO;
 
 
-public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GestureDetector.OnGestureListener {
 
     private double longitude;
     private double latitude;
@@ -71,6 +74,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     private AutoCompleteTextView location;
     private AutoCompleteTextView description;
     private Uri pictureUri;
+    private GestureDetectorCompat detector;
 
     @Override
     public int getCurrentMenuId() {
@@ -137,6 +141,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         description = (AutoCompleteTextView) findViewById(R.id.actDescription);
         location = (AutoCompleteTextView) findViewById(R.id.actLocation);
 
+        detector = new GestureDetectorCompat(this, this);
 
     }
 
@@ -306,6 +311,40 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
 
     }
 
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+        // add an explicit intent to invoke our Specimen Show Fragment
+        Intent specimenShowIntent = new Intent(this, SpecimenShowActivity.class);
+        startActivity(specimenShowIntent);
+        return true;
+    }
+
     class PlantSearchTask extends AsyncTask<String, Integer, List<PlantDTO>> {
 
         @Override
@@ -426,7 +465,11 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         }
     }
 
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
 }
 
 
