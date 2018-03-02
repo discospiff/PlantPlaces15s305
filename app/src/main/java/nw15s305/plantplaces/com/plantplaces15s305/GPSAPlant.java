@@ -112,8 +112,8 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         actPlantName.setOnItemSelectedListener(ps);
 
         // get plant names for our AutoCompleteTextView
-        PlantSearchTask pst = new PlantSearchTask();
-        pst.execute("e");
+        // PlantSearchTask pst = new PlantSearchTask();
+        // pst.execute("e");
 
         // get access to the image view.
         imgSpecimenPhoto = (ImageView) findViewById(R.id.imgSpecimenPhoto);
@@ -130,6 +130,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
         locationRequest.setInterval(MINUTE);
         locationRequest.setFastestInterval(15 * MILLISECONDS_PER_SECOND);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         lblLongitudeValue = (TextView) findViewById(R.id.lblLongitudeValue);
         lblLatitudeValue = (TextView) findViewById(R.id.lblLatitudeValue);
@@ -228,16 +229,16 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult( int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Did the user choose OK?  If so, the code inside these curly braces will execute.
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-                // we are hearing back from the camera.
-                Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
-                // at this point, we have the image from the camera.
-                imgSpecimenPhoto.setImageBitmap(cameraImage);
+//                // we are hearing back from the camera.
+//                Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+//                // at this point, we have the image from the camera.
+//                imgSpecimenPhoto.setImageBitmap(cameraImage);
             }
         }
 
@@ -252,7 +253,7 @@ public class GPSAPlant extends PlantPlacesActivity implements GoogleApiClient.Co
     }
 
     private void requestLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+    //     LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
 
     @Override

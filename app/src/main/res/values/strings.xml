@@ -25,5 +25,6 @@
     <string name="unableToSaveSpecimen">Unable to save specimen</string>
     <string name="lblSearchTerm">Enter Search Term</string>
     <string name="lblSearch">Search</string>
+    <string name="cannotopencamera">Cannot use the camera without permission</string>
 
 </resources>
